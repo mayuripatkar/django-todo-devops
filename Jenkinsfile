@@ -4,6 +4,7 @@ pipeline {
     environment {
         APP_DIR = "/opt/django-todo"
         VENV_DIR = "${APP_DIR}/venv"
+        PROJECT_DIR = "${env.WORKSPACE}/django-todo"
     }
 
     stages {
