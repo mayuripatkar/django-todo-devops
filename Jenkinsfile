@@ -16,7 +16,7 @@ pipeline {
             steps {
                 sh '''
                 python3 -m venv venv
-                source venv/bin/activate
+                . venv/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt || pip install django
                 '''
@@ -26,7 +26,7 @@ pipeline {
         stage('Migrate DB') {
             steps {
                 sh '''
-                source venv/bin/activate
+                . venv/bin/activate
                 python manage.py makemigrations
                 python manage.py migrate
                 '''
@@ -36,7 +36,7 @@ pipeline {
         stage('Run Django Server') {
             steps {
                 sh '''
-                source venv/bin/activate
+                . venv/bin/activate
                 nohup python manage.py runserver 0.0.0.0:8000 &
                 '''
             }
