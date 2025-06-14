@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PROJECT_DIR = "${env.WORKSPACE}/django-todo"
+        PROJECT_DIR = "${env.WORKSPACE}"
     }
 
     stages {
@@ -15,11 +15,9 @@ pipeline {
         stage('Setup Python Env') {
             steps {
                 sh '''
-                mkdir -p ${PROJECT_DIR}
-                cp -r * ${PROJECT_DIR}/
-                cd ${PROJECT_DIR}
                 python3 -m venv venv
                 source venv/bin/activate
+                pip install --upgrade pip
                 pip install -r requirements.txt || pip install django
                 '''
             }
@@ -28,7 +26,6 @@ pipeline {
         stage('Migrate DB') {
             steps {
                 sh '''
-                cd ${PROJECT_DIR}
                 source venv/bin/activate
                 python manage.py makemigrations
                 python manage.py migrate
@@ -39,7 +36,6 @@ pipeline {
         stage('Run Django Server') {
             steps {
                 sh '''
-                cd ${PROJECT_DIR}
                 source venv/bin/activate
                 nohup python manage.py runserver 0.0.0.0:8000 &
                 '''
